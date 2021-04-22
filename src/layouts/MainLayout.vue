@@ -23,7 +23,7 @@
           <br>
           <span style="font-size: 25px">来获得你的专属推荐吧!</span>
           <br>
-          <span style="font-size: 25px" >大数据1801 庄志豪</span>
+          <span style="font-size: 25px" >xwyzsn</span>
         </div>
 
 
@@ -174,7 +174,7 @@
 
       </div>
       <q-footer style="background-color:#1f2329;text-align: center">
-        <div style="color: #7b7e81">与我联系 +86 13819123757</div>
+        <div style="color: #7b7e81">与我联系 xwyzsn@gmail.com</div>
         <div style="color: #7b7e81">Copyright © 2021 xwyzsn  | All rights reserved</div>
       </q-footer>
     </q-layout>
