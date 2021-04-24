@@ -1,5 +1,6 @@
 
 import  random
+import pandas as pd
 import numpy as np
 def train_popularity(train):
     """计算训练集的流行度"""
@@ -8,39 +9,31 @@ def train_popularity(train):
         train_popularity.setdefault(item,0)
         train_popularity[item] += 1
     return train_popularity
-def loadfile(filename):
-    with open(filename, "r") as f:
-        for line in f:
-            yield line
 
-
-def read_rating_data(path='H:\desktop\ml-1m\ml-1m\\ratings.dat', train_rate=1.):
-    """载入评分数据
-        @param path:  文件路径
-        @param train_rate:   训练集所占整个数据集的比例，默认为1，表示所有的返回数据都是训练集
-        @return: (训练集，测试集)
-    """
-    trainset = list()
-    testset = list()
-    prob=[train_rate,1-train_rate]
-    for line in loadfile(filename=path):
-        user, movie, rating, _ = line.split('::')
-        value=np.random.choice([0,1],p=prob)
-        if value ==0:
-            trainset.append([int(user), int(movie), int(rating)])
+def read_rating_data(path='H:/desktop/ml-1m/ml-1m/ratings.dat', train_rate=1.):
+    train_list = list()
+    test_list = list()
+    data = pd.read_table(path, sep='::', header=None, engine='python')
+    data = np.array(data)
+    data = list(data)
+    p = [train_rate, 1 - train_rate]
+    for user, movie, rating, _ in data:
+        value = np.random.choice([0, 1], p=p)
+        if value == 0:
+            train_list.append((user, movie, rating))
         else:
-            testset.append([int(user), int(movie), int(rating)])
-    print("train set len"+str(len(trainset))+"   test set len " +str(len(testset)))
-    return trainset, testset
+            test_list.append((user, movie, rating))
+
+    return train_list, test_list
 
 
-def all_items(path='H:\desktop\ml-1m\ml-1m\\ratings.dat'):
-    """返回所有的movie"""
-    items = set()
-    for line in loadfile(filename=path):
-        _, movie, _, _ = line.split("::")
-        items.add(movie)
-    return items
+def all_items(path='H:/desktop/ml-1m/ml-1m/ratings.dat'):
+    item = set()
+    data = pd.read_table(path,sep='::',header=None,engine='python')
+    data = list(np.array(data))
+    for user,movie,rating,_ in data:
+        item.add(movie)
+    return item
 
 
 import os
