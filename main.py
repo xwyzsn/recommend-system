@@ -15,13 +15,22 @@ CORS(app,supports_credentials=True)
 api = Api(app)
 
 def load_file(filepath):
-
+    """
+    加载读入文件,将dat类型文件转为list输出
+    :param filepath: 文件路径
+    :return: 形如(user,movie,item)的list集合
+    """
     data = pd.read_table(filepath,sep = '::',header=None,engine='python')
     data = np.array(data)
     data = data.tolist()
     return data
 
 def read_data(path="H:\desktop\ml-1m\ml-1m\movies.dat"):
+    """
+    读入数据,返回user->{moive_id}集合和movie->{movie_id,movie_name,movie_types}集合
+    :param path: 文件路径
+    :return: data_dict:每个类型的电影对应的电影集合;movie_id_name_type每个电影的ID,name,和类型集合
+    """
     data_dict=dict()
     data = load_file(path)
     movie_id_name_types=dict()
@@ -37,6 +46,11 @@ def read_data(path="H:\desktop\ml-1m\ml-1m\movies.dat"):
     return data_dict,movie_id_name_types
 
 def read_csv(path="H:/desktop/ml-1m (2)/ml-1m/movie_poster.csv"):
+    """
+    和read_data作用类似,只不过是读取电影对应的海报集合CSV
+    :param path: 文件路径
+    :return: 返回形如(movie_id,post_url)的一个list
+    """
     data = pd.read_csv(path,header=None)
     data = np.array(data)
     data = data.tolist()
@@ -44,6 +58,12 @@ def read_csv(path="H:/desktop/ml-1m (2)/ml-1m/movie_poster.csv"):
 
 class Movie(Resource):
     def get(self,Movie_serise):
+        """
+        get方法,用户根据用户选择的电影,随机挑选一些电影给用户进行算法的进一步推荐
+        :param Movie_serise: 从前端接受的电影类型ID序列
+        :return: 用户选择的每一个type的电影30部相关电影组成的集合
+        格式为Json
+        """
         movie_list = Movie_serise.split("&")
         data,movie_detail_dict = read_data()
         movie_id_set=set()
@@ -70,6 +90,11 @@ class Movie(Resource):
 
 class GetRecommend(Resource):
     def get(self,Movie_id_series):
+        """
+        根据前端传回来的用户喜欢的电影ID进行推荐
+        :param Movie_id_series: 用户喜欢的电影序列
+        :return: 推荐的电影信息(id,name,post_url,url)
+        """
         id_list = Movie_id_series.split("&")
         model = UserCf.UserCf()
         train,test = read_rating_data(train_rate=0.1)
