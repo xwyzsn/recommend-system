@@ -3,8 +3,6 @@
     <q-layout class="q-layout">
       <q-header style="background: none;border: none"  reveal >
         <q-toolbar>
-
-          <!-- <q-btn flat round dense label="图标" class="q-mr-sm" /> -->
         </q-toolbar>
       </q-header>
 
@@ -12,26 +10,24 @@
 
       <div class="section" style=" height:90vh;width:100%;"  >
         <div  style="z-index: -1;height:100%;width:100%;">
-          <video ref="myvideo"  id="#myVideo"  tabindex="-1" style="height:100%;width:100%;object-fit: cover" autoplay loop >
-            <source type="video/mp4" src="http://127.0.0.1:8081/pictures/marvel.webm" >
-          </video>
         </div>
-
 
         <div class="center-div" style="font-size: 50px;color: #F2C037;font-family: KaiTi;text-align: center">
           推荐系统课设
           <br>
-          <span style="font-size: 25px">来获得你的专属推荐吧!</span>
+          <span>
+            xwyzsn
+          </span>
           <br>
-          <span style="font-size: 25px" >xwyzsn</span>
+          <span style="font-size: 25px" >这是一个推荐系统的课设,前端使用vue,后端使用flask进行.详细项目可查看
+          <a href="https://github.com/xwyzsn/recommend-system" target="_blank" style="text-decoration: none" > github</a>
+          </span>
+          <br >
+          <span style="font-size: 20px" >原剪辑视频太大这里不展示</span>
         </div>
-
-
-        <a href="#section2">
-          <div class="scroll-down center-in-center " style="margin-bottom: 2vh" >
+          <div @click="scrollDown()" class="scroll-down center-in-center " style="margin-bottom: 2vh" >
           </div>
 
-        </a>
 
       </div >
       <div class="section" id="section2">
@@ -90,30 +86,31 @@
               >
 
                 <template v-if="movie">
-                <div  class="row" v-for="index in parseInt((movie.length/3))" :key="index"  >
-                  <div class="col-3 q-ma-lg"  v-for="j in 3" :key="j"  >
-                    <q-card class="my-card" >
-                      <template v-if="3*(index-1)+j<movie.length">
-                      <q-card-section  >
-                        <a :href="movie[3*(index-1)+j]['movie_url']" target="_blank">{{movie[3*(index-1)+j]['name']}}</a>
-                        <br>
-                        <span style="color: grey">
+                  <div  class="row" v-for="index in parseInt((movie.length/3))" :key="index"  >
+                    <div class="col-3 q-ma-lg"  v-for="j in 3" :key="j"  >
+                      <q-card class="my-card" >
+                        <template v-if="3*(index-1)+j<movie.length">
+                          <q-card-section  >
+                            <a :href="movie[3*(index-1)+j]['movie_url']" target="_blank">{{movie[3*(index-1)+j]['name']}}</a>
+                            <br>
+                            <span style="color: grey">
                         {{movie[3*(index-1)+j]['types']}}
                           </span>
-                      </q-card-section>
-                      </template>
-                      <template v-if="3*(index-1)+j<movie.length">
-                      <q-card-section style="height: 75%">
-                        <q-img height="95%" contain :src="movie[3*(index-1)+j]['url']"></q-img>
-                        <q-checkbox v-model="options[3*(index-1)+j].value"></q-checkbox>
-                      </q-card-section>
-                      </template>
-<!--                      <q-card-section style="margin-bottom: 2px">-->
-<!--                        <q-checkbox v-model="options[3*(index-1)+j].value"></q-checkbox>-->
-<!--                      </q-card-section>-->
-                    </q-card>
+                          </q-card-section>
+                        </template>
+                        <template v-if="3*(index-1)+j<movie.length">
+                          <q-card-section style="height: 75%">
+                            <q-img height="95%" contain :src="movie[3*(index-1)+j]['url']"></q-img>
+
+                            <q-checkbox v-model="options[3*(index-1)+j].value"></q-checkbox>
+                          </q-card-section>
+                        </template>
+                        <!--                      <q-card-section style="margin-bottom: 2px">-->
+                        <!--                        <q-checkbox v-model="options[3*(index-1)+j].value"></q-checkbox>-->
+                        <!--                      </q-card-section>-->
+                      </q-card>
+                    </div>
                   </div>
-                </div>
                 </template>
 
               </q-infinite-scroll>
@@ -140,7 +137,7 @@
                         <template v-if="3*(index2-1)+j<recommend.length">
                           <q-card-section >
                             <a  :href="recommend[3*(index2-1)+j]['movie_url']" target="_blank">
-                            {{recommend[3*(index2-1)+j]['name']}}
+                              {{recommend[3*(index2-1)+j]['name']}}
                             </a>
                             <br>
                             <span style="color: grey">
@@ -240,17 +237,17 @@ export default {
 
   methods:{
     getMoviePhoto(){
-      if (this.step==1){
+      if (this.step===1){
         var str = ""
         for (var i in this.checkArray){
-          if(this.checkArray[i]==true){
-            if (i=="Children"){
+          if(this.checkArray[i]===true){
+            if (i==="Children"){
               i="Children's"
             }
-            else if(i=="Sci_Fi"){
+            else if(i==="Sci_Fi"){
               i="Sci-Fi"
             }
-            else if(i=="Film_Noir"){
+            else if(i==="Film_Noir"){
               i="Film-Noir"
             }
 
@@ -263,12 +260,12 @@ export default {
           // await fetch("http://localhost:5000/movie/"+str)
           //   .then(res=>res.json()).then(data=>{this.movie=JSON.parse(data)}).catch(err=>console.log(err))
 
-          await axios.get("http://127.0.0.1:5000/movie/"+str)
-           .then(res=>(this.movie=JSON.parse(res.data)))
-             this.movie.unshift({"id":0,"url":"-1"})
-              for(var i =0;i<this.movie.length;i++){
-                  this.options.push({label:this.movie[i]["id"],value:false})
-              }
+          await axios.get("https://api.xwyzsn.site/api/v1/recommend/movie/"+str)
+            .then(res=>(this.movie=JSON.parse(res.data)))
+          this.movie.unshift({"id":0,"url":"-1"})
+          for(var i =0;i<this.movie.length;i++){
+            this.options.push({label:this.movie[i]["id"],value:false})
+          }
           this.$refs.stepper.next()
         }
         getData()
@@ -278,31 +275,35 @@ export default {
     },
     getRecommend(){
 
-        var str=""
+      var str=""
       if(this.options.length>0) {
         for (var i = 0; i < this.options.length; i++) {
-          if (this.options[i]["value"] != undefined && this.options[i]["value"] != null) {
-            if (this.options[i]["value"] != false) {
+          if (this.options[i]["value"] !== undefined && this.options[i]["value"] != null) {
+            if (this.options[i]["value"] !== false) {
               str += this.options[i]["label"] + "&"
             }
           }
         }
       }
-        str = str.substr(0,str.length-1)
-        const getRecommendId = async ()=>{
+      str = str.substr(0,str.length-1)
+      const getRecommendId = async ()=>{
 
-        await axios.get("http://127.0.0.1:5000/recommend/"+str).then(res=>{
+        await axios.get("https://api.xwyzsn.site/api/v1/recommend/recommend/"+str).then(res=>{
           this.recommend=JSON.parse(res.data)
           console.log(this.recommend)
           this.$refs.stepper.next()
           this.$q.loading.hide()
         })
-        }
+      }
       this.$q.loading.show({
         message:'正在获取计算推荐信息,请稍等'
       })
       getRecommendId()
 
+    },
+    scrollDown(){
+
+      document.getElementById('section2').scrollIntoView();
     }
   },
   mounted() {
